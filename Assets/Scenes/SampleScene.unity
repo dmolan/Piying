@@ -157,6 +157,49 @@ RectTransform:
   m_AnchoredPosition: {x: -5, y: 0}
   m_SizeDelta: {x: -20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &38914456
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 38914458}
+  - component: {fileID: 38914457}
+  m_Layer: 0
+  m_Name: SaveTextureToBMPScriptHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &38914457
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38914456}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f48da5b7698f587478c2872de939b079, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &38914458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 38914456}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 312912626}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &110163233
 GameObject:
   m_ObjectHideFlags: 0
@@ -497,6 +540,7 @@ Transform:
   - {fileID: 1527076778}
   - {fileID: 110163234}
   - {fileID: 821777032}
+  - {fileID: 38914458}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1898,6 +1942,7 @@ MonoBehaviour:
   ButtonStop: {fileID: 1138057320}
   matchRigidBody: {fileID: 1554826407}
   myCounterText: {fileID: 2035799451}
+  saveTextureToBMP: {fileID: 38914457}
 --- !u!1 &1203565602
 GameObject:
   m_ObjectHideFlags: 0
@@ -2659,7 +2704,7 @@ Transform:
   m_GameObject: {fileID: 1554826402}
   m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 101, z: -10}
-  m_LocalScale: {x: 0.05, y: 0.5, z: 0.05}
+  m_LocalScale: {x: 0.0125, y: 0.25, z: 0.0125}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
