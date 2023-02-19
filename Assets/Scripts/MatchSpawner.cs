@@ -4,19 +4,20 @@ using TMPro;
 public class MatchSpawner : MonoBehaviour
 {
     private const int SIZE_OF_TEXTURE = 1000;
-    private const int MAX_MATCHES = 10000;
+    private const int MAX_MATCHES = 100000;
     private const float SIZE_X = 5;
     private const float SIZE_Y = 6;
     private const float SIZE_Z = 5;
-    private const int PLANE_TICKS = 20;
     private const int FREQUENCY = 1;
-    private const float LENGTH_OF_MATCH = 0.25f;
+    private const int PLANE_TICKS = 10;
+    private const float LENGTH_OF_MATCH = 0.5f;
 
     public GameObject idealMatch;
     public GameObject ButtonStart;
     public GameObject ButtonStop;
     public Rigidbody matchRigidBody;
     public TextMeshProUGUI myCounterText;
+    public TextMeshProUGUI myCounterAndGenerateText;
 
     private GameObject[] matches;
     private static Color[] colorMap;
@@ -65,8 +66,9 @@ public class MatchSpawner : MonoBehaviour
     {
         matches[localMatches] = Instantiate(idealMatch);
         matches[localMatches].GetComponent<Renderer>().material.color = new Color(255f/255, 255f/255, 255f/255);
-        matches[localMatches].transform.position = new Vector3(UnityEngine.Random.Range(-SIZE_X+1, SIZE_X-1), UnityEngine.Random.Range(5, SIZE_Y), UnityEngine.Random.Range(-SIZE_Z+0.5f, SIZE_Z-0.5f));
-        matches[localMatches].transform.Rotate(UnityEngine.Random.Range(0, 360f), UnityEngine.Random.Range(0, 360f), UnityEngine.Random.Range(0, 360f));
+        matches[localMatches].transform.position = 
+        new Vector3(UnityEngine.Random.Range(-SIZE_X+1, SIZE_X-1), 5.5f, UnityEngine.Random.Range(-4.5f, 4.5f));
+        matches[localMatches].transform.Rotate(UnityEngine.Random.Range(0, 360f), 0, 0);
         ++localMatches;
     }
  
@@ -74,6 +76,10 @@ public class MatchSpawner : MonoBehaviour
     {
         if ((!isOnPause && spawningCyclesCounter >= (1/frequency/frequency) * 5) && (localMatches + leftoverMatches < MAX_MATCHES))
         {
+            spawnMatch();
+            spawnMatch();
+            spawnMatch();
+            spawnMatch();
             spawnMatch();
             spawningCyclesCounter = 0;
         }
@@ -106,6 +112,10 @@ public class MatchSpawner : MonoBehaviour
             if (isOnPause) setPauseOff();
             else setPauseOn();
         }
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            checkMatchesPositionAndGenerate();
+        }
     }
 
     private float findDeltaToMiddles(float angle)
@@ -116,57 +126,50 @@ public class MatchSpawner : MonoBehaviour
 
     public int checkMatchesPosition()
     {
-        int succesessMatches = 0;
+        int crossingLineMatches = 0;
         for (int i = 0; i < localMatches; ++i)
         {
-            if (matches[i].transform.position.y < 2) matches[i].GetComponent<Renderer>().material.color = new Color(250f/255, 30f/255, 0f/255);
+            float unitSegment = (2f*SIZE_Z / PLANE_TICKS);
+            float positionOnZAxis = Mathf.Abs(matches[i].transform.position.z);
+            float remainder = positionOnZAxis - Mathf.FloorToInt(positionOnZAxis / unitSegment) * unitSegment;
 
-            for (int j = -PLANE_TICKS / 2; j <= PLANE_TICKS / 2; ++j)
+            if ((2f*remainder >= unitSegment ? unitSegment - remainder : remainder)
+            <= Mathf.Abs(Mathf.Sin(matches[i].transform.eulerAngles.y * Mathf.PI / 180)) * LENGTH_OF_MATCH / 2) 
             {
-                float tmpX = matches[i].transform.eulerAngles.x;
-                while (tmpX < 0) tmpX += 360;
-                // near 0 degrees or near 180 degrees or near -180 degrees
-                if (((tmpX >= 0 && tmpX <= 45) || (tmpX >= 315 && tmpX <= 360)) || (tmpX >= 135 && tmpX <= 225))
-                {
-                    if (Mathf.Abs(matches[i].transform.position.z - j*(1.0f * 2 * SIZE_Z / PLANE_TICKS)) <= 
-                    Mathf.Abs(Mathf.Sin(matches[i].transform.eulerAngles.y * Mathf.PI / 180)) * LENGTH_OF_MATCH / 2) 
-                    {
-                        succesessMatches++;
-                        if (matches[i].transform.position.y < 2) matches[i].GetComponent<Renderer>().material.color = new Color(0f/255, 60f/255, 230f/255);
-                        break;
-                    }
-                }
-                // near 90 degrees
-                else if (tmpX > 45 && tmpX < 135)
-                {
-                    if (Mathf.Abs(matches[i].transform.position.z - j*(1.0f * 2 * SIZE_Z / PLANE_TICKS)) <= 
-                    Mathf.Abs(Mathf.Cos(Mathf.Abs(matches[i].transform.eulerAngles.y - matches[i].transform.eulerAngles.z) * Mathf.PI / 180)) * LENGTH_OF_MATCH / 2) 
-                    {
-                        succesessMatches++;
-                        matches[i].GetComponent<Renderer>().material.color = new Color(0f/255, 60f/255, 230f/255);
-                        break;
-                    }
-                }
-                // near 270 degrees
-                else if (tmpX > 225 && tmpX < 315)
-                {
-                    if (Mathf.Abs(matches[i].transform.position.z - j*(1.0f * 2 * SIZE_Z / PLANE_TICKS)) <= 
-                    Mathf.Abs(Mathf.Cos(Mathf.Abs(matches[i].transform.eulerAngles.y + matches[i].transform.eulerAngles.z) * Mathf.PI / 180)) * LENGTH_OF_MATCH / 2) 
-                    {
-                        succesessMatches++;
-                        matches[i].GetComponent<Renderer>().material.color = new Color(0f/255, 60f/255, 230f/255);
-                        break;
-                    }
-                }
-                else
-                {
-                    Debug.Log("UNSOLVED CASE! " + tmpX);
-                }
+                if (matches[i].transform.position.y < 2) matches[i].GetComponent<Renderer>().material.color = new Color(0f/255, 60f/255, 230f/255);
+                ++crossingLineMatches;
+            }
+            else
+            {
+                if (matches[i].transform.position.y < 2) matches[i].GetComponent<Renderer>().material.color = new Color(250f/255, 30f/255, 0f/255);
+            }
+        }
+        return crossingLineMatches;
+    }
+
+    public void checkMatchesPositionAndGenerate()
+    {
+        int matchesToGenerate = 1000000;
+        int succesessMatches = 0;
+        for (int i = 0; i < matchesToGenerate; ++i)
+        {
+            float positionOnZAxis = UnityEngine.Random.Range(-4.5f, 4.5f);
+            float angleToZAxis = UnityEngine.Random.Range(0f, 360f);
+            
+            positionOnZAxis = Mathf.Abs(positionOnZAxis*2f) + 0.5f;
+            float unitSegment = (2f*SIZE_Z / PLANE_TICKS);
+            float remainder = positionOnZAxis - Mathf.Floor(positionOnZAxis / unitSegment) * unitSegment;
+
+            if ((2f*remainder > unitSegment ? remainder - unitSegment / 2f : remainder) 
+            <= Mathf.Abs(Mathf.Cos(angleToZAxis * Mathf.PI / 180)) * LENGTH_OF_MATCH / 2) 
+            {
+                ++succesessMatches;
             }
         }
 
-        return succesessMatches;
+        myCounterAndGenerateText.text = matchesToGenerate + " / " + succesessMatches + " ≈ " + (1.0f * matchesToGenerate / succesessMatches).ToString("F6");
     }
+
 
     public void setPauseOn()
     {
@@ -357,6 +360,7 @@ public class MatchSpawner : MonoBehaviour
         leftoverMatches = 0;
         leftoverGoodMatches = 0;
         myCounterText.text = "";
+        myCounterAndGenerateText.text = "";
     }
 }
 
@@ -365,6 +369,46 @@ public class MatchSpawner : MonoBehaviour
 //-------------------------------------------------------------------
 //------------------------------ARCHIVE------------------------------
 //-------------------------------------------------------------------
+
+// Working variation, but with cycle-closest-match finding
+/*
+    float tmpX = matches[i].transform.eulerAngles.x;
+    while (tmpX < 0) tmpX += 360;
+    near 0 degrees or near 180 degrees or near -180 degrees
+    if (((tmpX >= 0 && tmpX <= 45) || (tmpX >= 315 && tmpX <= 360)) || (tmpX >= 135 && tmpX <= 225))
+    {
+        if (delta <= 
+        Mathf.Abs(Mathf.Sin(matches[i].transform.eulerAngles.y * Mathf.PI / 180)) * LENGTH_OF_MATCH / 2) 
+        {
+            succesessMatches++;
+            if (matches[i].transform.position.y < 2) matches[i].GetComponent<Renderer>().material.color = new Color(0f/255, 60f/255, 230f/255);
+            // break;
+        }
+    }
+    // near 90 degrees
+    else if (tmpX > 45 && tmpX < 135)
+    {
+        if (delta <= 
+        Mathf.Abs(Mathf.Cos(Mathf.Abs(matches[i].transform.eulerAngles.y - matches[i].transform.eulerAngles.z) * Mathf.PI / 180)) * LENGTH_OF_MATCH / 2) 
+        {
+            succesessMatches++;
+            matches[i].GetComponent<Renderer>().material.color = new Color(0f/255, 60f/255, 230f/255);
+            // break;
+        }
+    }
+    // near 270 degrees
+    else if (tmpX > 225 && tmpX < 315)
+    {
+        if (delta <= 
+        Mathf.Abs(Mathf.Cos(Mathf.Abs(matches[i].transform.eulerAngles.y + matches[i].transform.eulerAngles.z) * Mathf.PI / 180)) * LENGTH_OF_MATCH / 2) 
+        {
+            succesessMatches++;
+            matches[i].GetComponent<Renderer>().material.color = new Color(0f/255, 60f/255, 230f/255);
+            // break;
+        }
+    }
+*/
+        
 
 // Function to generate image with random while/black dots:
 /*
