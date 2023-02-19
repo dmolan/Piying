@@ -1,16 +1,24 @@
-﻿using UnityEngine;
+﻿/*
+ * Gets keyboard input, spawns, counts and writes statistics about matches in TextMeshProUGUI text field 
+ */
+
+using UnityEngine;
 using TMPro;
 
 public class MatchSpawner : MonoBehaviour
 {
     private const int SIZE_OF_TEXTURE = 1000;
     private const int MAX_MATCHES = 100000;
-    private const float SIZE_X = 4.5f;
-    private const float SIZE_Y = 5f;
-    private const float SIZE_Z = 5f;
     private const int FREQUENCY = 1;
     private const int PLANE_TICKS = 10;
     private const float LENGTH_OF_MATCH = 0.5f;
+
+    // Size of plane on X axis and limits from -CONST to CONST in which match spawns on X axis
+    private const float SIZE_X = 4.5f;
+    // Position on which match spawns on Y axis
+    private const float SIZE_Y = 5f;
+    // Size of plane on Z axis
+    private const float SIZE_Z = 5f;
 
     public GameObject idealMatch;
     public GameObject ButtonStart;
@@ -24,14 +32,17 @@ public class MatchSpawner : MonoBehaviour
 
     private int spawningCyclesCounter = 0;
     private int recalculationCyclesCounter = 0;
-    private int localMatches = 0;
-    private int localGoodMatches = 0;
-    // Number of matches that aren't visible (were cleared). Used for statistics calculation.
-    private int leftoverMatches = 0;
-    // Number of matches that aren't visible (were cleared) and cross the lines. Used for statistics calculation.
-    private int leftoverGoodMatches = 0;
     private float frequency = 0.5f;
     private bool isOnPause = false;
+
+    // Number of matches from last clearing
+    private int localMatches = 0;
+    // Number of matches from last clearing that crosses one of the lines
+    private int localGoodMatches = 0;
+    // Number of matches that aren't visible (were cleared). Used for statistics calculation
+    private int leftoverMatches = 0;
+    // Number of matches that aren't visible (were cleared) and cross the lines. Used for statistics calculation
+    private int leftoverGoodMatches = 0;
 
 
 
@@ -170,11 +181,12 @@ public class MatchSpawner : MonoBehaviour
         // Paint match in white before all calculations
         matches[localMatches].GetComponent<Renderer>().material.color = new Color(255f/255, 255f/255, 255f/255);
         matches[localMatches].transform.position = 
-        new Vector3(UnityEngine.Random.Range(-SIZE_X, SIZE_X), SIZE_Y, UnityEngine.Random.Range(-SIZE_X, SIZE_X));
+        new Vector3(UnityEngine.Random.Range(-SIZE_X, SIZE_X), SIZE_Y, UnityEngine.Random.Range(-SIZE_Z + 0.5f, SIZE_Z - 0.5f));
         matches[localMatches].transform.Rotate(UnityEngine.Random.Range(0, 360f), 0, 0);
         ++localMatches;
     }
- 
+
+
 
     /*-----------------------------------------------*/
     /* TECHNICAL FUNCTIONS (for buttons and sliders) */

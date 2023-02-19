@@ -1,4 +1,7 @@
-﻿using UnityEngine;
+﻿/*
+ * Constructs and returns Texture2D by size and 2D color map
+ */
+using UnityEngine;
 
 public class TextureGenerator : MonoBehaviour
 {
