@@ -32,7 +32,7 @@ public class MatchSpawner : MonoBehaviour
 
     private int spawningCyclesCounter = 0;
     private int recalculationCyclesCounter = 0;
-    private float frequency = 0.5f;
+    private int frequency = 3;
     private bool isOnPause = false;
 
     // Number of matches from last clearing
@@ -61,13 +61,12 @@ public class MatchSpawner : MonoBehaviour
 
     void Update()
     {
-        if ((!isOnPause && spawningCyclesCounter >= (1/frequency/frequency) * 5) && (localMatches + leftoverMatches < MAX_MATCHES))
+        if ((!isOnPause && spawningCyclesCounter >= 5) && (localMatches + leftoverMatches < MAX_MATCHES))
         {
-            createNewRandomMatch();
-            createNewRandomMatch();
-            createNewRandomMatch();
-            createNewRandomMatch();
-            createNewRandomMatch();
+            for (int i = 0; i < frequency; ++i)
+            {
+                createNewRandomMatch();
+            }
             spawningCyclesCounter = 0;
         }
         else ++spawningCyclesCounter;
@@ -208,7 +207,7 @@ public class MatchSpawner : MonoBehaviour
 
     public void changeFrequency(float newFrequency)
     {
-        frequency = newFrequency;
+        frequency = (int)newFrequency;
     }
 
     public void quitApplication()
