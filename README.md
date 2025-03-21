@@ -15,48 +15,48 @@ This is the official github page of **Piying**, a simple [Unity](https://unity.c
 - 🍏 MacOS (Intel & Apple Silicon)
 
 ## How to run the app
-### Run the Built Version (recommended):
+## Run the Built Version (recommended):
 Refer to the [Releases](https://github.com/dmolan/Piying/releases) page.
 
-### Open the Unity Project (not recommended):
+## Open the Unity Project (not recommended):
 Ensure **Unity version [2019.4.40](https://unity.com/releases/editor/whats-new/2019.4.40)** is installed.
 
 To get started with the project, follow these steps to clone the repository, including the large files managed by Git LFS.
 
-## Prerequisites
+### 1. Prerequisites
 Ensure that you have **Git** and **Git LFS** installed. If you haven't installed them yet, follow these steps:
 
-### Install Git
-1. Download Git from the official website: [Git Downloads](https://git-scm.com/downloads).
-2. Follow the installation instructions for your operating system.
+#### Install Git
+- Download Git from the official website: [Git Downloads](https://git-scm.com/downloads).
+- Follow the installation instructions for your operating system.
 
-### Install Git LFS
-1. Download Git LFS from the official website: [Git LFS](https://git-lfs.github.com/).
-2. Follow the installation instructions for your operating system.
-3. After installation, run the following command to initialize Git LFS:
+#### Install Git LFS
+- Download Git LFS from the official website: [Git LFS](https://git-lfs.github.com/).
+- Follow the installation instructions for your operating system.
+- After installation, run the following command to initialize Git LFS:
    ```bash
    git lfs install
    ```
-## Clone the Repository
+### 2. Clone the Repository
 Open your terminal (or Git Bash on Windows).
 Clone the repository using the following command:
 
-### Using HTTPS
+#### Using HTTPS
 ```bash
 git clone https://github.com/dmolan/Piying
 ```
 
-### Using SSH (if you have SSH set up with GitHub):
+#### Using SSH (if you have SSH set up with GitHub):
 ```bash
 git clone git@github.com:dmolan/Piying
 ```
 
-## Fetch Git LFS Files
+### 3. Fetch Git LFS Files
 Once the repository is cloned, navigate into the project directory. Next, Git LFS files (such as large assets used in Unity) need to be fetched separately. Run the following command:
 ```bash
 git lfs pull
 ```
 This will download all the large files that are tracked by Git LFS, ensuring your project has all the necessary assets.
 
-## Open it using Unity Hub
+### 4. Open it using Unity Hub
 *Note: The interface might not be visible in Unity app, but it appears upon building.*
