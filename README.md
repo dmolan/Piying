@@ -1,6 +1,6 @@
 # Piying
 
-This is the official github page of **Piying**, a simple [Unity](https://unity.com/) app developed for 2023 π-day showcasing the so called [Buffon's needle problem](https://en.wikipedia.org/wiki/Buffon%27s_needle_problem), where π constant emerges from deceptively simple conditions.
+This is the official github page of **Piying**, a simple [Unity](https://unity.com/) app developed for 2023 π-day showcasing the so called [Buffon's needle problem](https://en.wikipedia.org/wiki/Buffon%27s_needle_problem), where π constant emerges from deceptively simple conditions. Please note that the app interface is available **only in Ukrainian**.
 
 ![App Screenshot 1](Assets/Pictures/README/pic1.png)
 
